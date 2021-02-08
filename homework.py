@@ -63,7 +63,7 @@ def main():
     current_timestamp = int(time.time())
     while True:
         try:
-            new_homework = get_homework_statuses(0)
+            new_homework = get_homework_statuses(current_timestamp)
             if new_homework.get('homeworks'):
                 logging.info('Отправка сообщения')
                 send_message(parse_homework_status(
