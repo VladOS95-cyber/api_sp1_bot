@@ -35,7 +35,8 @@ def parse_homework_status(homework):
     elif homework_status == 'reviewing':
         return 'работа взята в ревью'
     else:
-        verdict = 'Ревьюеру всё понравилось, можно приступать к следующему уроку.'
+        verdict = 'Ревьюеру всё понравилось, \
+можно приступать к следующему уроку.'
     return f'У вас проверили работу "{homework_name}"!\n\n{verdict}'
 
 
@@ -43,7 +44,10 @@ def get_homework_statuses(current_timestamp):
     params = {'from_date': current_timestamp}
     headers = {'Authorization': f'OAuth {PRAKTIKUM_TOKEN}'}
     try:
-        homework_statuses = requests.get(MAIN_URL, params=params, headers=headers)
+        homework_statuses = requests.get(
+            MAIN_URL, 
+            params=params, 
+            headers=headers)
         return homework_statuses.json()
     except requests.exceptions.HTTPError as error:
         print(error)
@@ -59,11 +63,15 @@ def main():
     current_timestamp = int(time.time())
     while True:
         try:
-            new_homework = get_homework_statuses(current_timestamp)
+            new_homework = get_homework_statuses(0)
             if new_homework.get('homeworks'):
                 logging.info('Отправка сообщения')
-                send_message(parse_homework_status(new_homework.get('homeworks')[0]), bot)
-            current_timestamp = new_homework.get('current_date', current_timestamp)  
+                send_message(parse_homework_status(
+                    new_homework.get('homeworks')[0]), 
+                    bot)
+            current_timestamp = new_homework.get(
+                'current_date', 
+                current_timestamp)  
             time.sleep(300)
 
         except Exception as e:
