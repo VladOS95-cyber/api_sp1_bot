@@ -28,13 +28,10 @@ logger.addHandler(handler)
 
 
 def parse_homework_status(homework):
-    try:
-        logging.debug('Получение названия домашки')
-        homework_name = homework.get('homework_name')
-        logging.debug('Получение статуса домашки')
-        homework_status = homework.get('status')
-    except ValueError as error:
-        logging.error(error)
+    logging.debug('Получение названия домашки')
+    homework_name = homework.get('homework_name')
+    logging.debug('Получение статуса домашки')
+    homework_status = homework.get('status')
     logging.info('Проверка статуса')
     if homework_status == 'rejected':
         verdict = 'К сожалению в работе нашлись ошибки.'
