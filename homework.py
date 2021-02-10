@@ -33,17 +33,17 @@ def parse_homework_status(homework):
         homework_name = homework.get('homework_name')
         logging.debug('Получение статуса домашки')
         homework_status = homework.get('status')
-        logging.info('Проверка статуса')
-        if homework_status == 'rejected':
-            verdict = 'К сожалению в работе нашлись ошибки.'
-        elif homework_status == 'reviewing':
-            return f'работа "{homework_name}" взята в ревью'
-        else:
-            verdict = 'Ревьюеру всё понравилось, \
-можно приступать к следующему уроку.'
-        return f'У вас проверили работу "{homework_name}"!\n\n{verdict}'
-    except Exception as error:
+    except ValueError as error:
         logging.error(error)
+    logging.info('Проверка статуса')
+    if homework_status == 'rejected':
+        verdict = 'К сожалению в работе нашлись ошибки.'
+    elif homework_status == 'reviewing':
+        return f'работа "{homework_name}" взята в ревью'
+    else:
+        verdict = 'Ревьюеру всё понравилось, \
+можно приступать к следующему уроку.'
+    return f'У вас проверили работу "{homework_name}"!\n\n{verdict}'
 
 
 def get_homework_statuses(current_timestamp):
@@ -62,7 +62,7 @@ def get_homework_statuses(current_timestamp):
             params=params,
             headers=headers)
         return homework_statuses.json()
-    except requests.exceptions.HTTPError as error:
+    except requests.RequestException as error:
         logging.error(error)
         return dict()
 
